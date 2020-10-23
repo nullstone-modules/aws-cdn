@@ -24,7 +24,7 @@ resource "aws_route53_record" "cert_validation" {
   name            = each.value.name
   type            = "CNAME"
   allow_overwrite = true
-  zone_id         = data.terraform_remote_state.domain.outputs.zone_id
+  zone_id         = var.parent_blocks.domain != "" ? data.terraform_remote_state.domain.outputs.zone_id : data.terraform_remote_state.subdomain.outputs.subdomain["zone_id"]
   records         = [each.value.record]
   ttl             = 60
 }

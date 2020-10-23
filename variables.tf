@@ -17,8 +17,19 @@ variable "block_name" {
 variable "parent_blocks" {
   type = object({
     origin : string,
-    domain : string
+    domain : string,
+    subdomain : string
   })
+
+  validation {
+    condition     = var.parent_blocks.domain == "" && var.parent_blocks.subdomain == ""
+    error_message = "Must select domain or subdomain parent block."
+  }
+
+  validation {
+    condition     = var.parent_blocks.domain != "" && var.parent_blocks.subdomain != ""
+    error_message = "Cannot use *both* domain and subdomain parent block."
+  }
 }
 
 variable "backend_conn_str" {
