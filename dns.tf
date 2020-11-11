@@ -1,9 +1,9 @@
 resource "aws_route53_record" "domain-root" {
   provider = aws.domain
 
-  count = var.parent_blocks.domain != "" ? 1 : 0
+  count = local.has_domain ? 1 : 0
 
-  zone_id = data.terraform_remote_state.domain.outputs.zone_id
+  zone_id = data.ns_connection.domain.outputs.zone_id
   name    = ""
   type    = "A"
 
@@ -17,9 +17,9 @@ resource "aws_route53_record" "domain-root" {
 resource "aws_route53_record" "domain-www" {
   provider = aws.domain
 
-  count = var.parent_blocks.domain != "" && var.enable_www ? 1 : 0
+  count = local.has_domain && var.enable_www ? 1 : 0
 
-  zone_id = data.terraform_remote_state.domain.outputs.zone_id
+  zone_id = data.ns_connection.domain.outputs.zone_id
   name    = "www"
   type    = "A"
 
@@ -31,9 +31,9 @@ resource "aws_route53_record" "domain-www" {
 }
 
 resource "aws_route53_record" "subdomain-root" {
-  count = var.parent_blocks.subdomain != "" ? 1 : 0
+  count = local.has_subdomain ? 1 : 0
 
-  zone_id = data.terraform_remote_state.subdomain.outputs.subdomain["zone_id"]
+  zone_id = data.ns_connection.subdomain.outputs.subdomain["zone_id"]
   name    = ""
   type    = "A"
 
@@ -45,9 +45,9 @@ resource "aws_route53_record" "subdomain-root" {
 }
 
 resource "aws_route53_record" "subdomain-www" {
-  count = var.parent_blocks.subdomain != "" && var.enable_www ? 1 : 0
+  count = local.has_subdomain && var.enable_www ? 1 : 0
 
-  zone_id = data.terraform_remote_state.domain.outputs.subdomain["zone_id"]
+  zone_id = data.ns_connection.domain.outputs.subdomain["zone_id"]
   name    = "www"
   type    = "A"
 
@@ -59,7 +59,7 @@ resource "aws_route53_record" "subdomain-www" {
 }
 
 locals {
-  main_subdomain = var.parent_blocks.domain != "" ? data.terraform_remote_state.domain.outputs.name : data.terraform_remote_state.subdomain.outputs.subdomain["name"]
+  main_subdomain = try(data.ns_connection.domain.outputs.name, data.ns_connection.subdomain.outputs.subdomain["name"])
   alt_subdomains = var.enable_www ? ["www.${local.main_subdomain}"] : []
   all_subdomains = flatten([[local.main_subdomain], local.alt_subdomains])
 }

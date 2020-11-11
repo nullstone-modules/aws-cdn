@@ -1,10 +1,10 @@
 resource "aws_cloudfront_distribution" "this" {
   origin {
-    domain_name = data.terraform_remote_state.origin.outputs.origin_domain_name
-    origin_id   = data.terraform_remote_state.origin.outputs.origin_id
+    domain_name = data.ns_connection.origin.outputs.origin_domain_name
+    origin_id   = data.ns_connection.origin.outputs.origin_id
 
     s3_origin_config {
-      origin_access_identity = data.terraform_remote_state.origin.outputs.origin_access_identity
+      origin_access_identity = data.ns_connection.origin.outputs.origin_access_identity
     }
   }
 
@@ -17,7 +17,7 @@ resource "aws_cloudfront_distribution" "this" {
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = data.terraform_remote_state.origin.outputs.origin_id
+    target_origin_id = data.ns_connection.origin.outputs.origin_id
 
     forwarded_values {
       query_string = false
