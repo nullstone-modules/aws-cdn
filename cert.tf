@@ -3,11 +3,7 @@ resource "aws_acm_certificate" "this" {
   validation_method         = "DNS"
   subject_alternative_names = local.alt_subdomains
 
-  tags = {
-    Stack       = var.stack_name
-    Environment = var.env
-    Block       = var.block_name
-  }
+  tags = data.ns_workspace.this.tags
 }
 
 resource "aws_route53_record" "cert_validation" {
@@ -24,7 +20,7 @@ resource "aws_route53_record" "cert_validation" {
   name            = each.value.name
   type            = "CNAME"
   allow_overwrite = true
-  zone_id         = data.terraform_remote_state.domain.outputs.zone_id
+  zone_id         = local.zone_id
   records         = [each.value.record]
   ttl             = 60
 }

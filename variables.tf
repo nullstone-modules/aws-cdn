@@ -1,31 +1,3 @@
-variable "owner_id" {
-  type = string
-}
-
-variable "stack_name" {
-  type = string
-}
-
-variable "env" {
-  type = string
-}
-
-variable "block_name" {
-  type = string
-}
-
-variable "parent_blocks" {
-  type = object({
-    origin : string,
-    domain : string
-  })
-}
-
-variable "backend_conn_str" {
-  type = string
-}
-
-
 variable "enable_www" {
   type        = bool
   description = "Enable/Disable creating www.<domain> DNS record in addition to <domain> DNS record for hosted site"
