@@ -34,8 +34,8 @@ locals {
 // We will need to be able to support secondary providers since the root domain
 //   is typically managed in a separate account from non-production environments
 provider "aws" {
-  access_key = data.terraform_remote_state.domain.outputs.delegator["access_key"]
-  secret_key = data.terraform_remote_state.domain.outputs.delegator["secret_key"]
+  access_key = try(data.ns_connection.domain.outputs.delegator["access_key"], "")
+  secret_key = try(data.ns_connection.domain.outputs.delegator["secret_key"], "")
 
   alias = "domain"
 }
