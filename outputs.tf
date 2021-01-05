@@ -4,6 +4,6 @@ output "cdn_arn" {
 }
 
 output "cert_arn" {
-  value       = aws_acm_certificate.this.arn
+  value       = local.cert_arn
   description = "string ||| SSL Certificate ARN"
 }
