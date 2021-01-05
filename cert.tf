@@ -9,5 +9,5 @@ module "cert" {
 }
 
 locals {
-  cert_arn = try(data.ns_connection.outputs.cert_arn, aws_acm_certificate.this.arn)
+  cert_arn = try(data.ns_connection.subdomain.outputs.cert_arn, module.cert.certificate_arn)
 }
