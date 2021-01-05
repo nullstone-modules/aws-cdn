@@ -10,3 +10,5 @@ in addition to <subdomain> DNS record for site hosted on CDN
 
 ## Outputs
 
+- `cdn_arn: string` - CloudFront Distribution ARN
+- `cert_arn: string` - SSL Certificate ARN
