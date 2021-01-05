@@ -28,7 +28,7 @@ data "ns_connection" "origin" {
 locals {
   has_domain    = data.ns_connection.domain.workspace != ""
   has_subdomain = data.ns_connection.subdomain.workspace != ""
-  zone_id       = try(data.ns_connection.domain.outputs.zone_id, data.ns_connection.subdomain.outputs.subdomain["zone_id"])
+  zone_id       = try(data.ns_connection.domain.outputs.zone_id, data.ns_connection.subdomain.outputs.zone_id)
 }
 
 // We will need to be able to support secondary providers since the root domain
