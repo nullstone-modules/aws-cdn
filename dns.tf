@@ -47,7 +47,7 @@ resource "aws_route53_record" "subdomain-root" {
 resource "aws_route53_record" "subdomain-www" {
   count = local.has_subdomain && var.enable_www ? 1 : 0
 
-  zone_id = data.ns_connection.domain.outputs.zone_id
+  zone_id = data.ns_connection.subdomain.outputs.zone_id
   name    = "www"
   type    = "A"
 
