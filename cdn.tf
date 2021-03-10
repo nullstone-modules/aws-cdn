@@ -1,3 +1,13 @@
+locals {
+  custom_404 = {
+    error_code    = 404,
+    response_code = 404,
+    cache_ttl     = 0,
+    path          = "/404.html"
+  }
+  custom_errors = var.enable_404page ? [local.custom_404] : []
+}
+
 resource "aws_cloudfront_distribution" "this" {
   origin {
     domain_name = data.ns_connection.origin.outputs.origin_domain_name
@@ -47,13 +57,13 @@ resource "aws_cloudfront_distribution" "this" {
   }
 
   dynamic "custom_error_response" {
-    for_each = var.enable_404page ? ["404.html"] : []
+    for_each = local.custom_errors
 
     content {
-      error_code            = "404"
-      error_caching_min_ttl = "0"
-      response_code         = "404"
-      response_page_path    = "404.html"
+      error_code            = custom_error_response.value["error_code"]
+      error_caching_min_ttl = custom_error_response.value["cache_ttl"]
+      response_code         = custom_error_response.value["response_code"]
+      response_page_path    = custom_error_response.value["path"]
     }
   }
 }
