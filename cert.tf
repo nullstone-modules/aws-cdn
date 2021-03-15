@@ -1,7 +1,11 @@
 module "cert" {
   source = "./cert"
 
-  domain    = local.main_subdomain
+  domain = {
+    name    = local.main_subdomain
+    zone_id = local.main_zone_id
+  }
+
   alt_names = local.alt_subdomains
   tags      = data.ns_workspace.this.tags
 
