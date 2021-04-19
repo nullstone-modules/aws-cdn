@@ -1,3 +1,7 @@
+provider "aws" {
+  alias = "domain"
+}
+
 variable "domain" {
   description = "A domain name for which the certificate should be issued. Zone ID is used to create validation records"
   type = object({
@@ -21,7 +25,7 @@ variable "tags" {
 resource "aws_acm_certificate" "this" {
   domain_name               = var.domain.name
   validation_method         = "DNS"
-  subject_alternative_names = []
+  subject_alternative_names = var.alt_names
 
   tags = var.tags
 }
@@ -41,6 +45,8 @@ resource "aws_route53_record" "cert_validation" {
   zone_id         = var.domain.zone_id
   records         = [each.value.record]
   ttl             = 60
+
+  provider = aws.domain
 }
 
 resource "aws_acm_certificate_validation" "this" {
