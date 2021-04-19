@@ -59,7 +59,7 @@ resource "aws_route53_record" "subdomain-www" {
 }
 
 locals {
-  main_subdomain = try(data.ns_connection.domain.outputs.name, data.ns_connection.subdomain.outputs.name)
+  main_subdomain = try(data.ns_connection.domain.outputs.fqdn, data.ns_connection.subdomain.outputs.fqdn)
   main_zone_id   = try(data.ns_connection.domain.outputs.zone_id, data.ns_connection.subdomain.outputs.zone_id)
   alt_subdomains = var.enable_www ? ["www.${local.main_subdomain}"] : []
   all_subdomains = flatten([[local.main_subdomain], local.alt_subdomains])
