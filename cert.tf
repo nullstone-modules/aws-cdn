@@ -1,18 +1,18 @@
 module "cert" {
-  source = "./cert"
+  source = "nullstone-modules/sslcert/aws"
 
   domain = {
     name    = local.main_subdomain
     zone_id = local.main_zone_id
   }
 
-  alt_names = local.alt_subdomains
-  tags      = data.ns_workspace.this.tags
+  alternative_names = local.alt_subdomains
+  tags              = data.ns_workspace.this.tags
 
   count = local.has_domain ? 1 : 0
 
   providers = {
-    aws.domain = aws.domain
+    aws = aws.domain
   }
 }
 
