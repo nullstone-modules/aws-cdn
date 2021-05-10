@@ -12,7 +12,7 @@ module "cert" {
   count = local.has_domain ? 1 : 0
 
   providers = {
-    aws = aws.domain
+    aws.domain = aws.domain
   }
 }
 
