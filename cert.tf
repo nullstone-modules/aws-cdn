@@ -8,8 +8,7 @@ module "cert" {
 
   alternative_names = local.alt_subdomains
   tags              = data.ns_workspace.this.tags
-
-  count = local.has_domain ? 1 : 0
+  enabled           = local.has_domain
 
   providers = {
     aws.domain = aws.domain
