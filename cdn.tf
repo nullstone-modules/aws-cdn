@@ -6,15 +6,18 @@ locals {
     path          = "/404.html"
   }
   custom_errors = var.enable_404page ? [local.custom_404] : []
+
+  s3_domain_name = var.app_metadata["s3_domain_name"]
+  s3_origin_id   = "S3-${var.app_metadata["s3_bucket_id"]}"
 }
 
 resource "aws_cloudfront_distribution" "this" {
   origin {
-    domain_name = data.ns_connection.origin.outputs.origin_domain_name
-    origin_id   = data.ns_connection.origin.outputs.origin_id
+    domain_name = local.s3_domain_name
+    origin_id   = local.s3_origin_id
 
     s3_origin_config {
-      origin_access_identity = data.ns_connection.origin.outputs.origin_access_identity
+      origin_access_identity = aws_cloudfront_origin_access_identity.this.cloudfront_access_identity_path
     }
   }
 
@@ -22,12 +25,12 @@ resource "aws_cloudfront_distribution" "this" {
   comment             = "Managed by Terraform"
   default_root_object = "index.html"
 
-  aliases = local.all_subdomains
+  aliases = local.alt_subdomains
 
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = data.ns_connection.origin.outputs.origin_id
+    target_origin_id = local.s3_origin_id
 
     forwarded_values {
       query_string = false
@@ -52,7 +55,7 @@ resource "aws_cloudfront_distribution" "this" {
   }
 
   viewer_certificate {
-    acm_certificate_arn = local.cert_arn
+    acm_certificate_arn = module.cert.certificate_arn
     ssl_support_method  = "sni-only"
   }
 
