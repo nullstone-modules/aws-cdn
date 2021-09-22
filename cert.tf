@@ -9,4 +9,8 @@ module "cert" {
 
   alternative_names = local.alt_subdomains
   tags              = local.tags
+
+  providers = {
+    aws.domain = aws.domain
+  }
 }
