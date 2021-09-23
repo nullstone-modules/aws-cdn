@@ -6,6 +6,14 @@ output "origin_access_identities" {
   ]
 }
 
+output "cdns" {
+  value = [
+    {
+      id = aws_cloudfront_distribution.this.id
+    }
+  ]
+}
+
 locals {
   public_fqdns = concat([aws_route53_record.subdomain-root.fqdn], aws_route53_record.subdomain-www.*.fqdn)
 }
