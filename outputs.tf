@@ -11,5 +11,5 @@ locals {
 }
 
 output "public_urls" {
-  value = [for pu in local.public_fqdns : { url = trimsuffix(pu, ".") }]
+  value = [for pu in local.public_fqdns : { url = "https://${trimsuffix(pu, ".")}" }]
 }
