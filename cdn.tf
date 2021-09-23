@@ -15,7 +15,7 @@ resource "aws_cloudfront_distribution" "this" {
   origin {
     domain_name = local.s3_domain_name
     origin_id   = local.s3_origin_id
-    origin_path = local.app_version
+    origin_path = "/${local.app_version}"
 
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.this.cloudfront_access_identity_path
