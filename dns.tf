@@ -8,6 +8,8 @@ resource "aws_route53_record" "subdomain-root" {
     zone_id                = aws_cloudfront_distribution.this.hosted_zone_id
     evaluate_target_health = true
   }
+
+  provider = aws.domain
 }
 
 resource "aws_route53_record" "subdomain-www" {
@@ -22,4 +24,6 @@ resource "aws_route53_record" "subdomain-www" {
     zone_id                = aws_cloudfront_distribution.this.hosted_zone_id
     evaluate_target_health = true
   }
+
+  provider = aws.domain
 }
