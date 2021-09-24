@@ -25,6 +25,7 @@ resource "aws_cloudfront_distribution" "this" {
   enabled             = true
   comment             = "Managed by Terraform"
   default_root_object = "index.html"
+  tags                = local.tags
 
   aliases = local.alt_subdomains
 
