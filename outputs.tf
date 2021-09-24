@@ -9,7 +9,8 @@ output "origin_access_identities" {
 output "cdns" {
   value = [
     {
-      id = aws_cloudfront_distribution.this.id
+      id  = aws_cloudfront_distribution.this.id
+      arn = aws_cloudfront_distribution.this.arn
     }
   ]
 }
