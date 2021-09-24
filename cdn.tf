@@ -12,6 +12,19 @@ locals {
 }
 
 resource "aws_cloudfront_distribution" "this" {
+  enabled             = true
+  price_class         = "PriceClass_All"
+  comment             = "Managed by Terraform"
+  tags                = local.tags
+  aliases             = local.all_subdomains
+  default_root_object = "index.html"
+
+  viewer_certificate {
+    acm_certificate_arn      = module.cert.certificate_arn
+    ssl_support_method       = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2021"
+  }
+
   origin {
     domain_name = local.s3_domain_name
     origin_id   = local.s3_origin_id
@@ -21,13 +34,6 @@ resource "aws_cloudfront_distribution" "this" {
       origin_access_identity = aws_cloudfront_origin_access_identity.this.cloudfront_access_identity_path
     }
   }
-
-  enabled             = true
-  comment             = "Managed by Terraform"
-  default_root_object = "index.html"
-  tags                = local.tags
-
-  aliases = local.alt_subdomains
 
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
@@ -48,18 +54,10 @@ resource "aws_cloudfront_distribution" "this" {
     max_ttl                = 31536000
   }
 
-  price_class = "PriceClass_All"
-
   restrictions {
     geo_restriction {
       restriction_type = "none"
     }
-  }
-
-  viewer_certificate {
-    acm_certificate_arn      = module.cert.certificate_arn
-    ssl_support_method       = "sni-only"
-    minimum_protocol_version = "TLSv1.2_2021"
   }
 
   dynamic "custom_error_response" {
