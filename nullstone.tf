@@ -17,7 +17,7 @@ locals {
   tags = data.ns_workspace.this.tags
 
   zone_id        = data.ns_connection.subdomain.outputs.zone_id
-  subdomain      = data.ns_connection.subdomain.outputs.fqdn
+  subdomain      = trimsuffix(data.ns_connection.subdomain.outputs.fqdn, ".")
   alt_subdomains = var.enable_www ? ["www.${local.subdomain}"] : []
   all_subdomains = concat([local.subdomain], local.alt_subdomains)
 }
