@@ -28,3 +28,11 @@ provider "aws" {
 
   alias = "domain"
 }
+
+// When attaching certificates to a CDN, the cert must live in the us-east-1 region
+// See https://aws.amazon.com/premiumsupport/knowledge-center/cloudfront-invalid-viewer-certificate/
+provider "aws" {
+  region = "us-east-1"
+
+  alias = "cert"
+}

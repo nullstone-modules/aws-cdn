@@ -11,6 +11,7 @@ module "cert" {
   tags              = local.tags
 
   providers = {
+    aws        = aws.cert
     aws.domain = aws.domain
   }
 }
