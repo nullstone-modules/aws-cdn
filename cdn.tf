@@ -13,12 +13,11 @@ locals {
 }
 
 resource "aws_cloudfront_distribution" "this" {
-  enabled             = true
-  price_class         = "PriceClass_All"
-  comment             = "Managed by Terraform"
-  tags                = local.tags
-  aliases             = local.all_subdomains
-  default_root_object = "index.html"
+  enabled     = true
+  price_class = "PriceClass_All"
+  comment     = "Managed by Terraform"
+  tags        = local.tags
+  aliases     = local.all_subdomains
 
   viewer_certificate {
     acm_certificate_arn      = module.cert.certificate_arn

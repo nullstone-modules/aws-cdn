@@ -8,12 +8,6 @@ EOF
   default = {}
 }
 
-variable "index" {
-  type        = string
-  description = "The default document to use when hitting the root of the site."
-  default     = "index.html"
-}
-
 variable "enable_www" {
   type        = bool
   description = "Enable/Disable creating www.<domain> DNS record in addition to <domain> DNS record for hosted site"
