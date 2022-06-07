@@ -1,9 +1,10 @@
 locals {
+  normalized_404_page = "/${trimprefix(var.notfound, "/")}"
   custom_404 = {
     error_code    = 404,
     response_code = 404,
     cache_ttl     = 0,
-    path          = "/404.html"
+    path          = local.normalized_404_page
   }
   custom_errors = var.enable_404page ? [local.custom_404] : []
 
