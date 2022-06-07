@@ -1,5 +1,5 @@
 locals {
-  normalized_404_page = "/${trimprefix(var.notfound, "/")}"
+  normalized_404_page = "/${trimprefix(var.notfound_document, "/")}"
   custom_404 = {
     error_code    = 404,
     response_code = 404,
@@ -18,7 +18,7 @@ resource "aws_cloudfront_distribution" "this" {
   comment             = "Managed by Terraform"
   tags                = local.tags
   aliases             = local.all_subdomains
-  default_root_object = "index.html"
+  default_root_object = var.default_document
 
   viewer_certificate {
     acm_certificate_arn      = module.cert.certificate_arn
