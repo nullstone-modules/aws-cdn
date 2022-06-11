@@ -2,11 +2,13 @@ org_name: nullstone
 name: aws-s3-cdn
 friendly_name: CDN for S3 Site
 description: Attach this capability to an s3 static site app to expose through a CDN to provide fast delivery of content.
-category: capability/public-entry
-type: capability/cdn/aws
-appCategories:
-    - app/static-site
-layer: service
-is_public: true
+category: capability
+subcategory: ingress
 provider_types:
     - aws
+platform: cdn
+subplatform: ""
+type: capability/cdn/aws
+appCategories:
+    - static-site
+is_public: true
