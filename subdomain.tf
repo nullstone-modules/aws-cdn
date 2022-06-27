@@ -9,7 +9,7 @@ locals {
   subdomain      = trimsuffix(data.ns_connection.subdomain.outputs.fqdn, ".")
   alt_subdomains = var.enable_www ? ["www.${local.subdomain}"] : []
   all_subdomains = concat([local.subdomain], local.alt_subdomains)
-  delegator      = data.ns_connection.subdomain.outputs.delegator
+  delegator      = try(data.ns_connection.subdomain.outputs.delegator, {})
 }
 
 provider "aws" {
