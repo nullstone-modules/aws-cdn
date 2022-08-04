@@ -1,12 +1,21 @@
 locals {
-  normalized_404_page = "/${trimprefix(var.notfound_document, "/")}"
-  custom_404 = {
+  normalized_404_page = "/${trimprefix(var.notfound_behavior.document, "/")}"
+  normal_404_behavior = {
     error_code    = 404,
     response_code = 404,
     cache_ttl     = 0,
     path          = local.normalized_404_page
   }
-  custom_errors = var.enable_404page ? [local.custom_404] : []
+  normalized_default_doc = "/${trimprefix(var.default_document, "/")}"
+  spa_404_behavior       = {
+    error_code    = 404
+    response_code = 200
+    cache_ttl     = 0,
+    path          = local.normalized_default_doc
+  }
+  custom_404 = var.notfound_behavior.spa_mode ? local.spa_404_behavior : local.normal_404_behavior
+
+  custom_errors = var.notfound_behavior.enabled ? [local.custom_404] : []
 
   s3_domain_name   = var.app_metadata["s3_domain_name"]
   s3_origin_id     = "S3-${var.app_metadata["s3_bucket_id"]}"

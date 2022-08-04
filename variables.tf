@@ -20,14 +20,22 @@ variable "default_document" {
   default     = "index.html"
 }
 
-variable "enable_404page" {
-  type        = bool
-  description = "Enable/Disable custom 404 page within s3 bucket. If enabled, must provide 404.html"
-  default     = false
-}
+variable "notfound_behavior" {
+  type = object({
+    enabled : bool
+    spa_mode : bool
+    document : string
+  })
 
-variable "notfound_document" {
-  type        = string
-  description = "The document to use when the page is not found. By default, /404.html"
-  default     = "404.html"
+  default = {
+    enabled  = true
+    spa_mode = true
+    document = "404.html"
+  }
+
+  description = <<EOF
+This configures behavior when a file is not found.
+If `spa_mode` is on, all not found errors will respond with `HTTP 200` serving `default_document`.
+Otherwise, will respond with `HTTP 404` serving `document`.
+EOF
 }
