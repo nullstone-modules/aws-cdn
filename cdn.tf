@@ -70,14 +70,22 @@ resource "aws_cloudfront_distribution" "this" {
   }
 
   ordered_cache_behavior {
-    allowed_methods        = ["GET"]
-    cached_methods         = ["GET"]
+    allowed_methods        = ["GET", "HEAD"]
+    cached_methods         = ["GET", "HEAD"]
     path_pattern           = "env.json"
     target_origin_id       = local.s3_env_origin_id
     viewer_protocol_policy = "https-only"
     min_ttl                = 0
     default_ttl            = 86400
     max_ttl                = 31536000
+
+    forwarded_values {
+      query_string = false
+
+      cookies {
+        forward = "none"
+      }
+    }
   }
 
   restrictions {
