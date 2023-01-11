@@ -8,6 +8,11 @@ EOF
   default = {}
 }
 
+locals {
+  // Older versions of the static site module don't have this, fallback to versioned assets
+  artifacts_key_template = try(var.app_metadata["artifacts_key_template"], "{{app-version}}/")
+}
+
 variable "enable_www" {
   type        = bool
   description = "Enable/Disable creating www.<domain> DNS record in addition to <domain> DNS record for hosted site"

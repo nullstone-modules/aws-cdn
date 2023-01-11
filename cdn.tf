@@ -20,6 +20,12 @@ locals {
   s3_domain_name   = var.app_metadata["s3_domain_name"]
   s3_origin_id     = "S3-${var.app_metadata["s3_bucket_id"]}"
   s3_env_origin_id = "S3-Env-${var.app_metadata["s3_bucket_id"]}"
+
+  // Use artifacts_key_template injected by the app module
+  // A valid origin_path has a preceding `/` and no trailing `/`
+  // `/` is invalid -- this will force empty string
+  artifacts_dir = trimprefix(replace(local.artifacts_key_template, "{{app-version}}", local.app_version), "/")
+  origin_path   = trimsuffix("/${local.artifacts_dir}", "/")
 }
 
 resource "aws_cloudfront_distribution" "this" {
@@ -40,9 +46,7 @@ resource "aws_cloudfront_distribution" "this" {
     domain_name = local.s3_domain_name
     origin_id   = local.s3_origin_id
 
-    // origin_path cannot end with a '/'
-    // If app_version is '', then we want origin_path = '' (this happens upon initial provision)
-    origin_path = trimsuffix("/${local.app_version}", "/")
+    origin_path = local.origin_path
 
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.this.cloudfront_access_identity_path
