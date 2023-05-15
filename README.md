@@ -1,6 +1,8 @@
-# block-aws-cdn
+# CDN for S3 Site
 
-Nullstone Block provisions an AWS CloudFront Distribution (CDN) and an SSL Certificate against a subdomain chosen 
+Creates an AWS CloudFront Distribution (CDN) with an SSL Certificate against a subdomain created as another block.
+
+
 
 ## Inputs
 

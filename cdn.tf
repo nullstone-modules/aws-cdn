@@ -7,7 +7,7 @@ locals {
     path          = local.normalized_404_page
   }
   normalized_default_doc = "/${trimprefix(var.default_document, "/")}"
-  spa_404_behavior       = {
+  spa_404_behavior = {
     error_code    = 404
     response_code = 200
     cache_ttl     = 0,
@@ -26,6 +26,14 @@ locals {
   // `/` is invalid -- this will force empty string
   artifacts_dir = trimprefix(replace(local.artifacts_key_template, "{{app-version}}", local.app_version), "/")
   origin_path   = trimsuffix("/${local.artifacts_dir}", "/")
+}
+
+data "aws_cloudfront_cache_policy" "this" {
+  name = var.cache_policy
+}
+
+data "aws_cloudfront_response_headers_policy" "this" {
+  name = var.response_headers_policy
 }
 
 resource "aws_cloudfront_distribution" "this" {
@@ -64,41 +72,28 @@ resource "aws_cloudfront_distribution" "this" {
   }
 
   default_cache_behavior {
-    allowed_methods  = ["GET", "HEAD"]
-    cached_methods   = ["GET", "HEAD"]
-    target_origin_id = local.s3_origin_id
-
-    forwarded_values {
-      query_string = false
-
-      cookies {
-        forward = "none"
-      }
-    }
-
-    viewer_protocol_policy = "redirect-to-https"
-    min_ttl                = 0
-    default_ttl            = 86400
-    max_ttl                = 31536000
+    allowed_methods            = ["GET", "HEAD", "OPTIONS"]
+    cached_methods             = ["GET", "HEAD", "OPTIONS"]
+    target_origin_id           = local.s3_origin_id
+    viewer_protocol_policy     = "redirect-to-https"
+    min_ttl                    = var.min_ttl
+    default_ttl                = var.default_ttl
+    max_ttl                    = var.max_ttl
+    cache_policy_id            = data.aws_cloudfront_cache_policy.this.id
+    response_headers_policy_id = data.aws_cloudfront_response_headers_policy.this.id
   }
 
   ordered_cache_behavior {
-    allowed_methods        = ["GET", "HEAD"]
-    cached_methods         = ["GET", "HEAD"]
-    path_pattern           = "env.json"
-    target_origin_id       = local.s3_env_origin_id
-    viewer_protocol_policy = "https-only"
-    min_ttl                = 0
-    default_ttl            = 86400
-    max_ttl                = 31536000
-
-    forwarded_values {
-      query_string = false
-
-      cookies {
-        forward = "none"
-      }
-    }
+    allowed_methods            = ["GET", "HEAD"]
+    cached_methods             = ["GET", "HEAD"]
+    path_pattern               = "env.json"
+    target_origin_id           = local.s3_env_origin_id
+    viewer_protocol_policy     = "https-only"
+    min_ttl                    = var.min_ttl
+    default_ttl                = var.default_ttl
+    max_ttl                    = var.max_ttl
+    cache_policy_id            = data.aws_cloudfront_cache_policy.this.id
+    response_headers_policy_id = data.aws_cloudfront_response_headers_policy.this.id
   }
 
   restrictions {
