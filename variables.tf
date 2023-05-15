@@ -72,8 +72,8 @@ EOF
 }
 
 variable "cache_policy" {
-  type = string
-  default = "CachingOptimized"
+  type        = string
+  default     = "CachingOptimized"
   description = <<EOF
 Set the policy for how the CDN caches objects.
 By default, the CDN is configured with `CachingOptimized`.
