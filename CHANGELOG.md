@@ -1,3 +1,7 @@
+# 0.9.1 (May 15, 2023)
+* Fixed default cache policy. Changed to `Managed-CachingOptimized`.
+* Fixed default response headers policy. Changed to `Managed-CORS-with-preflight-and-SecurityHeadersPolicy`.
+
 # 0.9.0 (May 15, 2023)
 * Allow configuration of Cache Policy. Default: `CachingOptimized`
 * Allow configuration of Response Headers Policy. Default: `CORS-with-preflight-and-SecurityHeadersPolicy`

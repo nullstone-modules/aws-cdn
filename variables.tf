@@ -73,20 +73,22 @@ EOF
 
 variable "cache_policy" {
   type        = string
-  default     = "CachingOptimized"
+  default     = "Managed-CachingOptimized"
   description = <<EOF
 Set the policy for how the CDN caches objects.
-By default, the CDN is configured with `CachingOptimized`.
+By default, the CDN is configured with `Managed-CachingOptimized`.
 You can choose a custom policy or AWS-managed policy.
+All AWS-managed policies have a `Managed-` prefix.
 EOF
 }
 
 variable "response_headers_policy" {
   type        = string
-  default     = "CORS-with-preflight-and-SecurityHeadersPolicy"
+  default     = "Managed-CORS-with-preflight-and-SecurityHeadersPolicy"
   description = <<EOF
 Set the policy for the response headers on the CDN.
 By default, the CDN is configured with CORS (preflight) and security headers.
 You can choose a custom policy or AWS-managed policy.
+All AWS-managed policies have a `Managed-` prefix.
 EOF
 }
