@@ -81,6 +81,7 @@ resource "aws_cloudfront_distribution" "this" {
     max_ttl                    = var.max_ttl
     cache_policy_id            = data.aws_cloudfront_cache_policy.this.id
     response_headers_policy_id = data.aws_cloudfront_response_headers_policy.this.id
+    compress                   = true
   }
 
   ordered_cache_behavior {
@@ -94,6 +95,7 @@ resource "aws_cloudfront_distribution" "this" {
     max_ttl                    = var.max_ttl
     cache_policy_id            = data.aws_cloudfront_cache_policy.this.id
     response_headers_policy_id = data.aws_cloudfront_response_headers_policy.this.id
+    compress                   = true
   }
 
   restrictions {

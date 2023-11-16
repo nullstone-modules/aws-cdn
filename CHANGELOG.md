@@ -1,3 +1,6 @@
+# 0.9.2 (Nov 16, 2023)
+* Enable automatic compression for site assets and `env.json`.
+
 # 0.9.1 (May 15, 2023)
 * Fixed default cache policy. Changed to `Managed-CachingOptimized`.
 * Fixed default response headers policy. Changed to `Managed-CORS-with-preflight-and-SecurityHeadersPolicy`.
